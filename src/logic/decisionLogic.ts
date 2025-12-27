@@ -157,9 +157,7 @@ export async function decisionLogic(
       "Low confidence or first-time correction; human review required.";
   }
 
-  audit.add("decide", decisionReason, {
-    confidenceAfter: score,
-  });
+  audit.add("decide", decisionReason);
 
   const reasoning = [
     applyResult.reasoning.join(", "),

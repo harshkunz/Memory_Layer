@@ -59,16 +59,23 @@ async function processInvoice(invoice: Invoice, store: MemoryStore) {
     auditTrail: decision.auditTrail,
   };
 
-  console.log(`\n=== Result for ${invoice.invoiceId} (${invoice.vendor}) ===`);
+  console.log(`\n --- Result for ${invoice.invoiceId} (${invoice.vendor}) ---`);
   console.log(JSON.stringify(output, null, 2));
 }
 
 async function main() {
   const store = new MemoryStore();
   const invoices = loadInvoices("invoices_extracted.json");
+
+  /*
   for (const inv of invoices) {
     await processInvoice(inv, store);
   }
+  */
+
+  // Local test
+  await processInvoice(invoices[0], store);
+
   store.close();
 }
 

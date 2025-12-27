@@ -10,8 +10,7 @@ import { learnMemory } from "../src/logic/learnMemory";
 import { HumanCorrection } from "../src/models/humanCorrection";
 
 async function main() {
-  console.log("Applying human corrections");
-
+  //console.log("Here");
   const store = new MemoryStore();
 
   const invPath = path.join(process.cwd(), "data", "invoices_extracted.json");
@@ -31,13 +30,14 @@ async function main() {
     const applyResult = applyMemory(invoice, recalled);
     const decision = await decisionLogic(invoice, recalled, applyResult, store);
 
-    console.log("\n System decision BEFORE human:");
+    console.log("\n System decision BEFORE human Correction:");
     console.log({
       requiresHumanReview: decision.requiresHumanReview,
       proposedCorrections: applyResult.proposedCorrections,
     });
 
     // Apply human corrections to fields
+    /*
     for (const c of hc.corrections) {
       if (c.field === "serviceDate") {
         invoice.fields.serviceDate = c.to as any;
@@ -55,6 +55,25 @@ async function main() {
         invoice.fields.lineItems[0].sku = c.to as any;
       }
     }
+    */
+
+  // Local test
+   let c = hc.corrections[0];
+    if (c.field === "serviceDate") {
+        invoice.fields.serviceDate = c.to as any;
+      } else if (c.field === "poNumber") {
+        invoice.fields.poNumber = c.to as any;
+      } else if (c.field === "grossTotal") {
+        invoice.fields.grossTotal = c.to as any;
+      } else if (c.field === "taxTotal") {
+        invoice.fields.taxTotal = c.to as any;
+      } else if (c.field === "currency") {
+        invoice.fields.currency = c.to as any;
+      } else if (c.field === "discountTerms") {
+        (invoice as any).discountTerms = c.to;
+      } else if (c.field === "lineItems[0].sku") {
+        invoice.fields.lineItems[0].sku = c.to as any;
+      }
 
     const finalDecision: "approved" | "rejected" | "corrected" = hc.finalDecision ?? "approved";
     const humanApproved = finalDecision === "approved";
@@ -86,7 +105,7 @@ async function main() {
       finalDecision
     );
 
-    console.log("\n System decision AFTER human:");
+    console.log("\n System decision AFTER human Correction:");
     console.log(
       `${hc.invoiceId}:`,
       {
@@ -95,6 +114,10 @@ async function main() {
         confidenceScore: decision.confidenceScore
       }
     );
+
+    if(c == hc.corrections[0]){
+      break;
+    }
   }
 
   store.close();
