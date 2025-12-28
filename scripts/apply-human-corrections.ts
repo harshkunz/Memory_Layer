@@ -21,9 +21,13 @@ async function main() {
     fs.readFileSync(hcPath, "utf-8")
   );
 
+
   for (const hc of humanCorrections) {
+    // Test
+    //const hc = humanCorrections[5];
+
     const invoice = invoices.find((i) => i.invoiceId === hc.invoiceId);
-    if (!invoice) continue;
+    if (!invoice) continue; //return;
 
     // System Run
     const recalled = await recallMemory(store, invoice);
@@ -37,7 +41,6 @@ async function main() {
     });
 
     // Apply human corrections to fields
-    /*
     for (const c of hc.corrections) {
       if (c.field === "serviceDate") {
         invoice.fields.serviceDate = c.to as any;
@@ -55,25 +58,6 @@ async function main() {
         invoice.fields.lineItems[0].sku = c.to as any;
       }
     }
-    */
-
-  // Local test
-   let c = hc.corrections[0];
-    if (c.field === "serviceDate") {
-        invoice.fields.serviceDate = c.to as any;
-      } else if (c.field === "poNumber") {
-        invoice.fields.poNumber = c.to as any;
-      } else if (c.field === "grossTotal") {
-        invoice.fields.grossTotal = c.to as any;
-      } else if (c.field === "taxTotal") {
-        invoice.fields.taxTotal = c.to as any;
-      } else if (c.field === "currency") {
-        invoice.fields.currency = c.to as any;
-      } else if (c.field === "discountTerms") {
-        (invoice as any).discountTerms = c.to;
-      } else if (c.field === "lineItems[0].sku") {
-        invoice.fields.lineItems[0].sku = c.to as any;
-      }
 
     const finalDecision: "approved" | "rejected" | "corrected" = hc.finalDecision ?? "approved";
     const humanApproved = finalDecision === "approved";
@@ -82,7 +66,7 @@ async function main() {
       console.log(
         `Invoice ${invoice.invoiceId} not approved; skipping learning.`
       );
-      continue;
+       continue; //return;
     }
 
     // Mark this as a human run
@@ -115,10 +99,9 @@ async function main() {
       }
     );
 
-    if(c == hc.corrections[0]){
-      break;
-    }
+  
   }
+  
 
   store.close();
   console.log("All human_corrections.json applied into memory.db");

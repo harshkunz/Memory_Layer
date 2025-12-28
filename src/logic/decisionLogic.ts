@@ -33,11 +33,6 @@ export async function decisionLogic(
     `Vendor memory: ${recalled.vendorMemory ? "found" : "none"}, corrections: ${recalled.correctionMemory.length}`
   );
 
-  audit.add(
-    "apply",
-    `Applied ${applyResult.proposedCorrections.length} memory-based corrections.`
-  );
-
   const tracker = new ConfidenceTracker(invoice.confidence ?? 0.5);
 
   
@@ -116,6 +111,7 @@ export async function decisionLogic(
 
 
   // 5. Final Decision
+  let check = false;
   let requiresHumanReview = true;
   let finalDecision: "approved" | "rejected" | "corrected";
   let decisionReason = "";
@@ -125,9 +121,10 @@ export async function decisionLogic(
     decisionReason =
       "Similar discrepancies were previously rejected by humans; review required.";
   } else if (hasMissingMandatory) {
-    finalDecision = "corrected";
+    finalDecision = "rejected";
+    check = true;
     decisionReason =
-      "auto-correct with moderate confidence.";
+      "auto-reject; human review required";
   } else if (hasPoSuggestion && !hasStrongPoStrategy) {
     finalDecision = "corrected";
     decisionReason =
@@ -156,6 +153,12 @@ export async function decisionLogic(
     decisionReason =
       "Low confidence or first-time correction; human review required.";
   }
+
+  let value = (check == true) ? 'No memory Applied' : `Applied ${applyResult.proposedCorrections.length} memory-based corrections.`
+  audit.add(
+    "apply",
+    value
+  );
 
   audit.add("decide", decisionReason);
 

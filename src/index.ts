@@ -67,14 +67,14 @@ async function main() {
   const store = new MemoryStore();
   const invoices = loadInvoices("invoices_extracted.json");
 
-  /*
+  
   for (const inv of invoices) {
     await processInvoice(inv, store);
   }
-  */
+  
 
   // Local test
-  await processInvoice(invoices[0], store);
+  //await processInvoice(invoices[3], store);
 
   store.close();
 }
