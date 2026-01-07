@@ -435,46 +435,46 @@ Video Link - https://drive.google.com/drive/folders/1ATCLxVn9dcDs-DnL0oXUzv3UUcA
 ``` Java
   Memory_Layer/
   │
-  ├── 📁 data/
+  ├── data/
   │   ├── delivery_notes.json
   │   ├── human_corrections.json
   │   ├── invoices_extracted.json
   │   ├── purchase_orders.json
   │   └── memory.db
   │
-  ├── 📁 scripts/
+  ├── scripts/
   │   ├── setup-db.ts
   │   ├── seed-po-dn.ts
   │   └── apply-human-corrections.ts
   │
-  ├── 📁 src/
-  │   ├── 📁 logic/
+  ├── src/
+  │   ├── logic/
   │   │   ├── recallMemory.ts
   │   │   ├── applyMemory.ts
   │   │   ├── decisionLogic.ts
   │   │   ├── learnMemory.ts
   │   │   └── tableMemory.ts
   │   │
-  │   ├── 📁 memory/
+  │   ├── memory/
   │   │   ├── memoryStore.ts
   │   │   ├── vendorMemory.ts
   │   │   ├── correctionMemory.ts
   │   │   ├── resolutionMemory.ts
   │   │   └── orderStore.ts
   │   │
-  │   ├── 📁 models/
+  │   ├── models/
   │   │   ├── invoiceModel.ts
   │   │   ├── humanCorrection.ts
   │   │   └── orderModel.ts
   │   │
-  │   ├── 📁 utils/
+  │   ├── utils/
   │   │   ├── auditTrail.ts
   │   │   ├── confidenceTracker.ts
   │   │   └── duplicateDetector.ts
   │   │
   │   └── index.ts
   │
-  ├── 📁 tests/
+  ├── tests/
   │   └── memory.test.ts
   │
   ├── .gitignore
